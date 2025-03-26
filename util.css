@@ -1,0 +1,11 @@
+.display-flex{
+    display: flex;
+}
+.aline-center{
+    align-items: center;
+    cursor: pointer;
+}
+.v{
+    background-color:#ffc914;
+    /* border: 1px solid black; */
+}
