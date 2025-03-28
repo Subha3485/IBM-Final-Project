@@ -1,0 +1,249 @@
+* {
+    margin: auto;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    height: 800px;
+    background-color: #ffffff;
+}
+
+.nav {
+    width: 100%;
+    height: 17vh;
+    flex-wrap: wrap;
+    display: flex
+;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    box-shadow: 0 0 10px rgba(232, 229, 229, 0.1);
+    background:;
+    /* background: url(/image/logo.jpg) no-repeat #f8f9fa; */
+    background-size: cover;
+    position: relative;
+    top: 0;
+    z-index: 200;
+    padding-right: 440px;
+    padding-top: 1px;
+}
+
+
+
+/* nav {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+} */
+
+nav .logo img {
+    border-radius: 50%;
+}
+
+nav.logo img {
+    width: 100px;
+    height: auto;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #000000;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 800;
+    /* text-decoration: none; */
+
+}
+
+nav ul li a:hover {
+    color: #007bff;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: aquamarine;
+    background: #f3f3f3;
+    box-shadow: inset 0 12px 10px rgba(216, 40, 40, 0.1);
+    padding: 0% 5%;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 400px;
+    max-width: 400px;
+    justify-content: center;
+}
+
+.nav-center .searchBar input {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 10px 15px;
+    font-size: 1em;
+    color: #0f0e0e;
+    /* width: 100%; */
+    height: 100%;
+    top: 15px;
+}
+
+.nav-center .searchBar .search-icon {
+    /* width: 40px; */
+    margin-left: 10px;
+    /* border: 1px solid #f9f4f4; */
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* .searchBar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    box-shadow: inset 0 1px 2px rgba(230, 1, 1, 0.1);
+    padding: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 90%;
+    height: 50px;
+    max-width: 400px;
+    justify-content: center;
+    margin: 1% 0;
+    margin-left: 1px;
+
+} */
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* background: url(); */
+}
+
+.searchBar input {
+    /* border: 1px solid #e42d2d; */
+    background: none;
+    outline: none;
+    padding: 10px 15px;
+    font-size: 1em;
+
+    color: #0f0e0e;
+    /* width: 100%; */
+    height: 100%;
+    top: 15px;
+}
+
+/* .search-button {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+} */
+
+/* .search button:hover {
+    color: #1033d0;
+} */
+
+.category-box {
+    position: relative;
+    width: 250px;
+    outline-style: calc();
+    border: 1px solid #000000;
+    border-radius: 30px;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    transition: color 300ms;
+}
+
+.category-box {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    transition: transform 300ms;
+}
+
+
+
+/* .category-box h2:hover {
+    color: #007bff;
+
+} */
+
+/* .box {
+    bottom: 0;
+    display: flex;
+    border: #000000;
+    justify-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 2%;
+    padding: 0 10%;
+    width: 100%;
+    height: 100px;
+    max-width: 1200px;
+    position: relative;
+    top: 0;
+    z-index: 100;
+    margin-top: 15px;
+}
+
+
+.category-box h2:hover {
+    color: #007bff;
+
+} 
+/* .row.category-box:hover {
+    color: #007bff;
+} */
+
+.box {
+    bottom: 0;
+    display: flex;
+    border: #000000;
+    justify-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 2%;
+    padding: 0 10%;
+    width: 100%;
+    height: 100px;
+    max-width: 1200px;
+    position: relative;
+    top: 0;
+    z-index: 100;
+    margin-top: 15px;
+}
+
+.category-box:hover {
+    /* background-color: yellow; */
+    font-size: 18px;
+    padding: 1px;
+    border: #000000;
+    border-radius: 0cm;
+}
+
+.category-box h2:hover {
+    color: #007bff;
+
+}
