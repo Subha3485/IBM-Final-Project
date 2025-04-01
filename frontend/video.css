@@ -1,0 +1,144 @@
+
+
+*{
+    padding: 0;
+    margin: 0;
+    background-image: ;
+}
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    padding:2% ;
+    /* display: flex; */
+}
+.top{
+    display: flex;
+    padding-top: 20px;
+}
+.videoc{
+    height: 93vh;
+    width:60vw;
+    /* flex-wrap:wrap; */
+    border-radius:10px;
+    margin-right: 15px;
+}
+.yt{
+    height: 80%;
+    width: 100%;
+    border-radius:10px;
+}
+.sidebar{
+    padding: 15px;
+    padding-left: 45px;
+    margin-left: 20px;
+    height: 90vh;
+    width: 92vw;
+    border-radius: 10px;
+    font-size: 25px;
+    margin-top: 20px;
+    border: 1px solid #ffc914;
+    background-color: lightblue;
+    overflow: auto;
+}
+.sidebar ul{
+}
+.lower{ 
+    margin-top: 15px;
+    padding: 10px;
+    width: 92.6vw;
+    min-height: 50vh;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.comment-section {
+    width: 100%;
+    max-width: 10000px; /* Adjust as needed */
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: sans-serif;
+}
+
+.comment-input-area {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+#commentInput {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical; /* Allow vertical resizing */
+}
+
+#postCommentBtn {
+    padding: 10px 15px;
+    background-color: #007bff; /* YouTube blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+#postCommentBtn:hover {
+    background-color: #0056b3;
+}
+
+.comment {
+    display: flex;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment:last-child {
+    border-bottom: none;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ddd; /* Placeholder for avatar */
+    margin-right: 10px;
+    overflow: hidden; /* Ensure image stays within circle */
+}
+
+.comment-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Maintain aspect ratio and cover container */
+}
+
+.comment-text {
+    flex-grow: 1;
+}
+
+.comment-author {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.comment-date {
+    font-size: 0.8em;
+    color: #777;
+}
+
+@media (max-width: 768px) {
+    .videoc,
+    .sidebar {
+        width: 100%; /* Make both sections span full width */
+        height: auto; /* Adjust height automatically */
+        margin: 0; /* Remove margins for compact spacing */
+    }
+
+    .comment-section,
+    .lower {
+        width: 100%; /* Expand sections to fit smaller screens */
+        padding: 10px; /* Reduce padding for compact view */
+    }
+}

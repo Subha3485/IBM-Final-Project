@@ -1,0 +1,8 @@
+
+Cookly - Recipe Sharing Platform
+
+A recipe-sharing app where users can browse, save, and upload their favorite recipes. Each recipe includes cooking time, ingredients, and step-by-step instructions. Users can rate and comment on recipes they try. Admins can feature trending recipes.
+
+Ref--- allrecipes, tasty
+
+a div contain option --save,cooking-time,and like button

@@ -1,0 +1,115 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    background-color: #f4f4f4; /* Example background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    max-width: 900px; /* Adjust as needed */
+    width: 100%;
+    margin: 20px;
+}
+
+.image-section {
+    flex: 1;
+    padding: 0px;
+
+}
+
+.image-section img {
+    display: block;
+    width: 100%;
+    height: 600px;
+    border-radius: 4px;
+}
+
+.form-section {
+    flex: 1;
+    padding: 30px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.social-providers {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.social-providers li {
+    margin-bottom: 10px;
+}
+
+.login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.login-button img{
+    margin-right: 10px;
+    height: 20px;
+}
+.email-login {
+    border-color: #007bff; /* Example color */
+    color: #007bff;
+}
+
+.facebook-login {
+    border-color: #1877f2; /* Example color */
+    color: #1877f2;
+}
+
+.google-login {
+    border-color: #db4437; /* Example color */
+    color: #db4437;
+}
+
+.login-button:hover {
+    background-color: #eee;
+}
+
+.signup-link, .terms-privacy {
+    color: #555;
+    font-size: 0.9em;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.signup-link a, .terms-privacy a {
+    color: #007bff;
+}
+
+.logo{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    margin: 20px;
+    max-width: 2px;
+    justify-content: left;
+}
