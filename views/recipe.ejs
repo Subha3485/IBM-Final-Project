@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= recipe.title %> - Cookly</title>
+    <link rel="stylesheet" href="/home.css">
+    <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .recipe-detail {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .recipe-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .recipe-image {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .recipe-image img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .recipe-info h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .recipe-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+            padding: 20px;
+            background: #f8f8f8;
+            border-radius: 10px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .meta-item i {
+            font-size: 1.5em;
+            color: #ba2929;
+            width: 30px;
+        }
+
+        .meta-item-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 0.85em;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .meta-value {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .difficulty-easy { color: #27ae60; }
+        .difficulty-medium { color: #f39c12; }
+        .difficulty-hard { color: #e74c3c; }
+
+        .description {
+            background: #fff3e0;
+            padding: 20px;
+            border-left: 4px solid #ba2929;
+            margin: 20px 0;
+            border-radius: 5px;
+            font-size: 1.05em;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .recipe-actions {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+
+        .like-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 25px;
+            background: #fff;
+            border: 2px solid #ba2929;
+            color: #ba2929;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .like-btn:hover {
+            background: #ba2929;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .like-btn.liked {
+            background: #ba2929;
+            color: white;
+        }
+
+        .like-count {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 8px;
+            font-weight: 600;
+        }
+
+        .ingredients, .instructions {
+            margin-top: 35px;
+            margin-bottom: 35px;
+        }
+
+        .ingredients h2, .instructions h2 {
+            color: #ba2929;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #ba2929;
+        }
+
+        .ingredients ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ingredients li {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            background: #fafafa;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .ingredients li:hover {
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .ingredients li:before {
+            content: "✓ ";
+            color: #ba2929;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .instructions {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 5px solid #ba2929;
+            line-height: 1.8;
+            font-size: 1.05em;
+            color: #555;
+        }
+
+        .video-container {
+            margin: 45px 0;
+        }
+
+        .video-container h2 {
+            color: #ba2929;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #ba2929;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            padding: 12px 25px;
+            background-color: #ba2929;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .back-button:hover {
+            background-color: #8a1f1f;
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .recipe-header {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .recipe-image {
+                order: -1;
+            }
+
+            .recipe-info h1 {
+                font-size: 2em;
+            }
+
+            .recipe-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .recipe-actions {
+                flex-direction: column;
+            }
+
+            .like-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- navbar -->
+    <nav class="nav">
+      <button id="menuToggle" class="menu-toggle" aria-label="Open menu" type="button">
+          <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="logo">
+          <img src="/images/Cookly-Logo.png" alt="Cookly logo">
+          <span class="brand-text">Cookly</span>
+      </div>
+      <div class="top-search-wrap">
+          <input id="topSearchInput" class="top-search-input" type="text" placeholder="Search recipes...">
+          <button id="topSearchBtn" class="top-search-btn" type="button" aria-label="Search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <button id="voiceSearchBtn" class="voice-search-btn" type="button" aria-label="Voice search">
+              <i class="fa-solid fa-microphone"></i>
+          </button>
+      </div>
+      <div class="top-actions">
+          <a href="/" class="top-pill recipes-pill">Recipes</a>
+          <a href="/create" class="top-pill create-pill"><i class="fa-solid fa-plus"></i> Create</a>
+          <button id="themeToggle" class="icon-btn theme-btn" type="button" aria-label="Toggle theme">
+              <i id="themeIcon" class="fa-regular fa-moon"></i>
+          </button>
+          <button class="icon-btn bell-btn" type="button" aria-label="Notifications">
+              <i class="fa-regular fa-bell"></i>
+              <span class="badge">2</span>
+          </button>
+          <img class="user-avatar" src="/images/Cookly-Logo.png" alt="User profile">
+      </div>
+      <ul id="MenuItems">
+          <li><a href="/">Home</a></li>
+          <li><a href="/">Recipes</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Account Center</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/signup">Sign Up</a></li>
+          <li><a href="">Cart</a></li>
+      </ul>
+    </nav>
+    <div id="menuBackdrop" class="menu-backdrop"></div>
+
+    <div class="recipe-detail">
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Recipes
+        </a>
+        
+        <div class="recipe-header">
+            <div class="recipe-image">
+                <img src="<%= recipe.image %>" alt="<%= recipe.title %>" onerror="this.src='/images/Cookly-Logo.png'">
+            </div>
+            
+            <div class="recipe-info">
+                <h1><%= recipe.title %></h1>
+                <p style="color: #666; font-size: 1.05em; margin: 10px 0;">
+                    <i class="fas fa-tag"></i> <%= recipe.cuisineType %>
+                </p>
+                
+                <% if (recipe.description) { %>
+                    <div class="description">
+                        <%= recipe.description %>
+                    </div>
+                <% } %>
+
+                <div class="recipe-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-users"></i>
+                        <div class="meta-item-content">
+                            <span class="meta-label">Servings</span>
+                            <span class="meta-value"><%= recipe.servings %> people</span>
+                        </div>
+                    </div>
+
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="meta-item-content">
+                            <span class="meta-label">Prep Time</span>
+                            <span class="meta-value"><%= recipe.prepTime %> mins</span>
+                        </div>
+                    </div>
+
+                    <div class="meta-item">
+                        <i class="fas fa-fire"></i>
+                        <div class="meta-item-content">
+                            <span class="meta-label">Cook Time</span>
+                            <span class="meta-value"><%= recipe.cookingTime %> mins</span>
+                        </div>
+                    </div>
+
+                    <div class="meta-item">
+                        <i class="fas fa-utensils"></i>
+                        <div class="meta-item-content">
+                            <span class="meta-label">Difficulty</span>
+                            <span class="meta-value difficulty-<%= recipe.difficulty.toLowerCase() %>">
+                                <%= recipe.difficulty %>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-actions">
+                    <button class="like-btn" onclick="toggleLike('<%= recipe.id || recipe._id %>')">
+                        <i class="fas fa-heart"></i>
+                        <span id="like-text">Like Recipe</span>
+                        <span class="like-count" id="like-count"><%= recipe.likes %></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ingredients">
+            <h2><i class="fas fa-list-check"></i> Ingredients</h2>
+            <ul>
+                <% recipe.ingredients.forEach(ingredient => { %>
+                    <li><%= ingredient %></li>
+                <% }); %>
+            </ul>
+        </div>
+
+        <div class="instructions">
+            <h2><i class="fas fa-book"></i> Instructions</h2>
+            <p><%= recipe.instructions %></p>
+        </div>
+
+        <% if (recipe.videoUrl) { %>
+            <div class="video-container">
+                <h2><i class="fas fa-play-circle"></i> Video Tutorial</h2>
+                <div class="video-wrapper">
+                    <iframe src="<%= recipe.videoUrl %>" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>Cookly</h2>
+                    <p>Delicious recipes at your fingertips!</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#">Recipes</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Account Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="footer-bottom">&copy; 2025 Cookly. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let isLiked = false;
+        function getAnonymousLikeKey() {
+            const storageKey = 'cookly_like_key';
+            let key = localStorage.getItem(storageKey);
+            if (!key) {
+                key = (window.crypto && crypto.randomUUID)
+                    ? crypto.randomUUID()
+                    : 'anon-' + Math.random().toString(36).slice(2) + Date.now();
+                localStorage.setItem(storageKey, key);
+            }
+            return key;
+        }
+
+        async function toggleLike(recipeId) {
+            try {
+                const response = await fetch(`/api/recipes/${recipeId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-like-key': getAnonymousLikeKey(),
+                    }
+                });
+
+                if (!response.ok) {
+                    const err = await response.json().catch(() => ({}));
+                    throw new Error(err.message || 'Failed to update like');
+                }
+
+                const data = await response.json();
+                const likeBtn = document.querySelector('.like-btn');
+                const likeCount = document.getElementById('like-count');
+                const likeText = document.getElementById('like-text');
+
+                likeCount.textContent = data.likes;
+                
+                if (data.liked) {
+                    likeBtn.classList.add('liked');
+                    likeText.textContent = 'Liked!';
+                } else {
+                    likeBtn.classList.remove('liked');
+                    likeText.textContent = 'Like Recipe';
+                }
+            } catch (error) {
+                console.error('Error liking recipe:', error);
+                alert('Failed to update like. Please try again.');
+            }
+        }
+
+        // Shared header controls (same behavior as home header).
+        const menuToggle = document.getElementById('menuToggle');
+        const menuItems = document.getElementById('MenuItems');
+        const menuBackdrop = document.getElementById('menuBackdrop');
+        const topSearchInput = document.getElementById('topSearchInput');
+        const topSearchBtn = document.getElementById('topSearchBtn');
+        const voiceSearchBtn = document.getElementById('voiceSearchBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function closeMenu() {
+            menuItems.classList.remove('open');
+            menuBackdrop.classList.remove('open');
+        }
+
+        menuToggle.addEventListener('click', () => {
+            menuItems.classList.toggle('open');
+            menuBackdrop.classList.toggle('open');
+        });
+        menuBackdrop.addEventListener('click', closeMenu);
+        menuItems.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+
+        function goToSearch(term) {
+            const query = (term || '').trim();
+            if (!query) {
+                window.location.href = '/';
+                return;
+            }
+            window.location.href = '/?q=' + encodeURIComponent(query);
+        }
+
+        topSearchBtn.addEventListener('click', () => goToSearch(topSearchInput.value));
+        topSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                goToSearch(topSearchInput.value);
+            }
+        });
+
+        voiceSearchBtn.addEventListener('click', function() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert('Voice search is not supported in this browser.');
+                return;
+            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onresult = function(event) {
+                const text = event.results[0][0].transcript || '';
+                topSearchInput.value = text;
+                goToSearch(text);
+            };
+            recognition.start();
+        });
+
+        function applyTheme(theme) {
+            document.body.classList.toggle('theme-dark', theme === 'dark');
+            themeIcon.className = theme === 'dark' ? 'fa-regular fa-sun' : 'fa-regular fa-moon';
+        }
+        const savedTheme = localStorage.getItem('cooklyTheme');
+        applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+        themeToggle.addEventListener('click', function() {
+            const nextTheme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
+            applyTheme(nextTheme);
+            localStorage.setItem('cooklyTheme', nextTheme);
+        });
+    </script>
+</body>
+</html>

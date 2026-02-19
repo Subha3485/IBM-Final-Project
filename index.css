@@ -1,0 +1,479 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+html {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+body {
+    height: 100%;
+    min-height: 100vh;
+    background-color: #ffffff;
+    padding-top: 64px;
+    overflow-y: auto;
+}
+
+.nav {
+    width: 100%;
+    height: 64px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    background-color: #ffc914;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    gap: 14px;
+}
+
+.menu-toggle {
+    border: none;
+    background: transparent;
+    font-size: 1.6rem;
+    margin-right: 14px;
+    cursor: pointer;
+    color: #1f1f1f;
+}
+
+.menu-backdrop {
+    position: fixed;
+    inset: 64px 0 0 0;
+    background: rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+    z-index: 900;
+}
+
+.menu-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* nav {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f8f8;
+} */
+
+nav .logo img {
+    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-text {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #1f1f1f;
+    letter-spacing: 0.2px;
+}
+
+.top-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.top-search-input {
+    height: 44px;
+    width: 100%;
+    border-radius: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.28);
+    background: rgba(255, 255, 255, 0.18);
+    color: #1b1b1b;
+    padding: 0 16px;
+    font-size: 1.1rem;
+}
+
+.top-search-input:focus {
+    outline: none;
+    border-color: rgba(0, 0, 0, 0.45);
+}
+
+.top-search-btn,
+.voice-search-btn,
+.icon-btn {
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.28);
+    background: rgba(255, 255, 255, 0.18);
+    color: #1b1b1b;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.top-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 16px;
+    border-radius: 21px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.recipes-pill {
+    background: rgba(255, 255, 255, 0.18);
+    color: #1b1b1b;
+    border: 1px solid rgba(0, 0, 0, 0.28);
+}
+
+.create-pill {
+    background: rgba(255, 255, 255, 0.18);
+    color: #1b1b1b;
+    border: 1px solid rgba(0, 0, 0, 0.28);
+}
+
+.bell-btn {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ff0033;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #3a3d45;
+}
+
+.theme-btn i {
+    pointer-events: none;
+}
+
+#MenuItems {
+    position: fixed;
+    top: 64px;
+    left: -280px;
+    width: 260px;
+    height: calc(100vh - 64px);
+    background: #0d0d0d;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 18px 14px;
+    margin: 0;
+    list-style: none;
+    transition: left 0.22s ease;
+    z-index: 950;
+    overflow-y: hidden;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+#MenuItems::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+#MenuItems.open {
+    left: 0;
+    overflow-y: auto;
+}
+
+#MenuItems li {
+    margin: 0;
+    width: 100%;
+}
+
+#MenuItems li a {
+    color: #f3f3f3;
+    text-decoration: none;
+    font-size: 1.18rem;
+    font-weight: 600;
+    width: 100%;
+    display: block;
+    padding: 12px 14px;
+    border-radius: 10px;
+}
+
+#MenuItems li a:hover {
+    background: #1f1f1f;
+    color: #ffffff;
+}
+
+@media (max-width: 900px) {
+    .brand-text {
+        font-size: 1.1rem;
+    }
+
+    .top-search-wrap {
+        max-width: 380px;
+    }
+
+    .top-pill.recipes-pill {
+        display: none;
+    }
+
+    #MenuItems {
+        width: 240px;
+        left: -260px;
+    }
+}
+
+@media (max-width: 700px) {
+    .top-search-wrap {
+        max-width: 230px;
+    }
+
+    .create-pill {
+        display: none;
+    }
+}
+
+body.theme-dark {
+    background-color: #111317;
+    color: #f2f2f2;
+}
+
+body.theme-dark .nav {
+    background-color: #0b0d10;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+body.theme-dark .top-search-input {
+    background: #07080a;
+    border-color: #2f333b;
+    color: #f5f5f5;
+}
+
+body.theme-dark .card {
+    background-color: #1a1d22;
+    color: #f3f3f3;
+}
+
+body.theme-dark .card h2,
+body.theme-dark .card p {
+    color: #f3f3f3;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    background-color: aquamarine;
+    background: #f3f3f3;
+    box-shadow: inset 0 12px 10px rgba(216, 40, 40, 0.1);
+    padding: 0% 5%;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 400px;
+    max-width: 400px;
+    justify-content: center;
+}
+
+.nav-center .searchBar input {
+    border: none;
+    outline: none;
+    background: none;
+    padding: 10px 15px;
+    font-size: 1em;
+    color: #0f0e0e;
+    /* width: 100%; */
+    height: 100%;
+    top: 15px;
+}
+
+.nav-center .searchBar .search-icon {
+    /* width: 40px; */
+    margin-left: 10px;
+    /* border: 1px solid #f9f4f4; */
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* .searchBar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    box-shadow: inset 0 1px 2px rgba(230, 1, 1, 0.1);
+    padding: 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 90%;
+    height: 50px;
+    max-width: 400px;
+    justify-content: center;
+    margin: 1% 0;
+    margin-left: 1px;
+
+} */
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* background: url(); */
+}
+
+.searchBar input {
+    /* border: 1px solid #e42d2d; */
+    background: none;
+    outline: none;
+    padding: 10px 15px;
+    font-size: 1em;
+
+    color: #0f0e0e;
+    /* width: 100%; */
+    height: 100%;
+    top: 15px;
+}
+
+/* .search-button {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+} */
+
+/* .search button:hover {
+    color: #1033d0;
+} */
+
+.category-box {
+    position: relative;
+    width: 250px;
+    outline-style: calc();
+    border: 1px solid #000000;
+    border-radius: 30px;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    transition: color 300ms;
+}
+
+.category-box {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    transition: transform 300ms;
+}
+
+
+
+/* .category-box h2:hover {
+    color: #007bff;
+
+} */
+
+/* .box {
+    bottom: 0;
+    display: flex;
+    border: #000000;
+    justify-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 2%;
+    padding: 0 10%;
+    width: 100%;
+    height: 100px;
+    max-width: 1200px;
+    position: relative;
+    top: 0;
+    z-index: 100;
+    margin-top: 15px;
+}
+
+
+.category-box h2:hover {
+    color: #007bff;
+
+} 
+/* .row.category-box:hover {
+    color: #007bff;
+} */
+
+.box {
+    bottom: 0;
+    display: flex;
+    border: #000000;
+    justify-self: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 2%;
+    padding: 0 10%;
+    width: 100%;
+    height: 100px;
+    max-width: 1200px;
+    position: relative;
+    top: 0;
+    z-index: 100;
+    margin-top: 15px;
+}
+
+.category-box:hover {
+    /* background-color: yellow; */
+    font-size: 18px;
+    padding: 1px;
+    border: #000000;
+    border-radius: 0cm;
+}
+
+.category-box h2:hover {
+    color: #007bff;
+
+}

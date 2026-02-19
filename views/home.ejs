@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic metadata and styles for the home page -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookly.com</title>
+    <link rel="stylesheet" href="/home.css">
+    <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
+        /* Hover effect for dynamically generated recipe cards */
+        .recipe-card {
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top navigation -->
+    <nav class="nav">
+      <button id="menuToggle" class="menu-toggle" aria-label="Open menu" type="button">
+          <i class="fa-solid fa-bars"></i>
+      </button>
+      <div class="logo">
+          <img src="/images/Cookly-Logo.png" alt="Cookly logo">
+          <span class="brand-text">Cookly</span>
+      </div>
+      <div class="top-search-wrap">
+          <input id="topSearchInput" class="top-search-input" type="text" placeholder="Search recipes...">
+          <button id="topSearchBtn" class="top-search-btn" type="button" aria-label="Search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+          <button id="voiceSearchBtn" class="voice-search-btn" type="button" aria-label="Voice search">
+              <i class="fa-solid fa-microphone"></i>
+          </button>
+      </div>
+      <div class="top-actions">
+          <a href="/" class="top-pill recipes-pill">Recipes</a>
+          <a href="/create" class="top-pill create-pill">
+              <i class="fa-solid fa-plus"></i> Create
+          </a>
+          <button id="themeToggle" class="icon-btn theme-btn" type="button" aria-label="Toggle theme">
+              <i id="themeIcon" class="fa-regular fa-moon"></i>
+          </button>
+          <button class="icon-btn bell-btn" type="button" aria-label="Notifications">
+              <i class="fa-regular fa-bell"></i>
+              <span class="badge">2</span>
+          </button>
+          <img class="user-avatar" src="/images/Cookly-Logo.png" alt="User profile">
+      </div>
+      <ul id="MenuItems">
+          <li><a href="/">Home</a></li>
+          <li><a href="/">Recipes</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Account Center</a></li>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/signup">Sign Up</a></li>
+          <li><a href="">Cart</a></li>
+      </ul>
+    </nav>
+    <div id="menuBackdrop" class="menu-backdrop"></div>
+
+    <!-- Hero section with background video + search -->
+    <div class="atf_17">
+        <div class="responsive-container-block big-continer">
+
+          <video class="bg-img" autoplay loop muted playsinline poster="/images/1.jpg">
+            <source src="/images/Header.mp4" type="video/mp4">
+          </video>
+
+          <div class="responsive-container-block container">
+            <p class="text-blk landing19-head">
+            Cookly
+            </p>
+            <p class="text-blk landing19-subhead">
+            a smarter way to browse and share recipes
+            </p>
+          </div>
+        </div>
+      </div>
+
+    <section class="country-filters-wrap">
+        <div id="country-filters" class="country-filters"></div>
+    </section>
+
+    <!-- Dynamic recipe card grid -->
+    <main id="recipes-container">
+        <!-- Cards are rendered by displayRecipes() -->
+    </main>
+    <div id="load-more-trigger" style="height: 1px;"></div>
+
+    <script>
+        // In-memory cache and feed state.
+        let allRecipes = [];
+        let currentPage = 1;
+        const pageSize = 30;
+        let isFetching = false;
+        let hasMore = true;
+        let isSearchActive = false;
+        let currentCuisine = 'Indian';
+        let availableCuisines = [];
+
+        function shuffleRecipes(list) {
+            const arr = [...list];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        async function loadRecipes({ append = false } = {}) {
+            if (isFetching || (!append && currentPage !== 1) || (append && !hasMore)) return;
+            const container = document.getElementById('recipes-container');
+            isFetching = true;
+            if (!append) {
+                container.innerHTML = '<p style="padding:16px;">Loading recipes...</p>';
+            }
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 3500);
+                const cuisineParam =
+                    currentCuisine && currentCuisine !== 'All'
+                        ? `&cuisine=${encodeURIComponent(currentCuisine)}`
+                        : '';
+                const response = await fetch(`/api/recipes?page=${currentPage}&limit=${pageSize}&fast=true${cuisineParam}`, {
+                    signal: controller.signal
+                });
+                clearTimeout(timeout);
+                if (!response.ok) throw new Error(`Status ${response.status}`);
+                const payload = await response.json();
+
+                const recipes = Array.isArray(payload) ? payload : (payload.recipes || []);
+                const shuffledBatch = shuffleRecipes(recipes);
+                allRecipes = append ? allRecipes.concat(shuffledBatch) : shuffledBatch;
+                isSearchActive = false;
+
+                if (append) {
+                    displayRecipes(shuffledBatch, true);
+                } else {
+                    displayRecipes(allRecipes, false);
+                }
+
+                if (recipes.length < pageSize) {
+                    hasMore = false;
+                } else {
+                    currentPage += 1;
+                }
+            } catch (error) {
+                console.error('Error loading recipes:', error);
+                container.innerHTML = '<p style="padding:16px;color:#b00020;">Could not load recipes from API.</p>';
+            } finally {
+                isFetching = false;
+            }
+        }
+
+        // Create and render recipe card elements.
+        function displayRecipes(recipes, append = false) {
+            const container = document.getElementById('recipes-container');
+            if (!append) {
+                container.innerHTML = '';
+            }
+            if (!Array.isArray(recipes) || recipes.length === 0) {
+                if (!append) {
+                    container.innerHTML = '<p style="padding:16px;">No recipes found.</p>';
+                }
+                return;
+            }
+            
+            recipes.forEach(recipe => {
+                const card = document.createElement('div');
+                card.className = 'card recipe-card';
+                const recipeId = recipe.id || recipe._id;
+                card.onclick = () => goToRecipe(recipeId);
+                card.innerHTML = `
+                    <div class="like-container">
+                        <img src="/icons/heart.svg" alt="heart icon" class="heart">
+                    </div>
+                    <img src="${recipe.image || '/images/Cookly-Logo.png'}" alt="${recipe.title || 'Recipe'}" class="content" loading="lazy" decoding="async" onerror="this.src='/images/Cookly-Logo.png'">
+                    <h2>${recipe.title || 'Untitled Recipe'}</h2>
+                    <p>${(recipe.instructions || '').substring(0, 60)}...</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function applySearch(searchTerm) {
+            const term = (searchTerm || '').toLowerCase().trim();
+            if (!term) {
+                isSearchActive = false;
+                displayRecipes(allRecipes, false);
+                return;
+            }
+
+            isSearchActive = true;
+            const filtered = allRecipes.filter(recipe =>
+                (recipe.title || '').toLowerCase().includes(term) ||
+                (Array.isArray(recipe.ingredients) ? recipe.ingredients : []).some(ing => (ing || '').toLowerCase().includes(term))
+            );
+            displayRecipes(filtered, false);
+        }
+
+        async function fetchCuisineTypes() {
+            try {
+                const response = await fetch('/api/recipes/cuisines');
+                if (!response.ok) throw new Error('Failed to load cuisines');
+                const payload = await response.json();
+                const cuisines = Array.isArray(payload.cuisines) ? payload.cuisines : [];
+                availableCuisines = cuisines.filter(Boolean);
+            } catch (error) {
+                availableCuisines = [];
+            }
+        }
+
+        function getCuisineButtonOrder() {
+            const normalized = Array.from(new Set(availableCuisines.map(c => c.trim()).filter(Boolean)));
+            const withoutIndian = normalized.filter(c => c.toLowerCase() !== 'indian').sort((a, b) => a.localeCompare(b));
+            return ['All', 'Indian', ...withoutIndian];
+        }
+
+        function renderCuisineButtons() {
+            const wrap = document.getElementById('country-filters');
+            if (!wrap) return;
+            wrap.innerHTML = '';
+
+            getCuisineButtonOrder().forEach((cuisine) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'country-filter-btn';
+                if (cuisine.toLowerCase() === currentCuisine.toLowerCase()) {
+                    button.classList.add('active');
+                }
+                if (cuisine.toLowerCase() === 'indian') {
+                    button.classList.add('indian-must');
+                }
+                button.textContent = cuisine;
+                button.addEventListener('click', () => setCuisineFilter(cuisine));
+                wrap.appendChild(button);
+            });
+        }
+
+        function setCuisineFilter(cuisine) {
+            currentCuisine = cuisine;
+            currentPage = 1;
+            hasMore = true;
+            allRecipes = [];
+            isSearchActive = false;
+            const topSearch = document.getElementById('topSearchInput');
+            if (topSearch) topSearch.value = '';
+            renderCuisineButtons();
+            loadRecipes({ append: false });
+        }
+
+        // Open recipe detail route when a card is clicked.
+        function goToRecipe(recipeId) {
+            window.location.href = `/recipe/${recipeId}`;
+        }
+
+        // Filter cards by title or ingredient keywords.
+        document.getElementById('topSearchBtn').addEventListener('click', function() {
+            applySearch(document.getElementById('topSearchInput').value);
+        });
+
+        document.getElementById('topSearchInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                applySearch(this.value);
+            }
+        });
+
+        document.getElementById('voiceSearchBtn').addEventListener('click', function() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert('Voice search is not supported in this browser.');
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.onresult = function(event) {
+                const text = event.results[0][0].transcript || '';
+                document.getElementById('topSearchInput').value = text;
+                applySearch(text);
+            };
+            recognition.start();
+        });
+
+        // Initial page bootstrap.
+        async function initHome() {
+            await fetchCuisineTypes();
+            renderCuisineButtons();
+            setCuisineFilter('Indian');
+        }
+        initHome();
+
+        function tryLoadNextPage() {
+            if (!isSearchActive && hasMore && !isFetching) {
+                loadRecipes({ append: true });
+            }
+        }
+
+        // Infinite scroll loader with robust fallback for custom scroll containers.
+        function onScrollLoadMore() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            const docHeight = Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight
+            );
+            const nearBottom = scrollTop + viewportHeight >= docHeight - 320;
+            if (nearBottom) {
+                tryLoadNextPage();
+            }
+        }
+
+        window.addEventListener('scroll', onScrollLoadMore, { passive: true });
+        document.body.addEventListener('scroll', onScrollLoadMore, { passive: true });
+
+        // Observer trigger keeps loading reliable even when scroll metrics differ by browser.
+        const loadMoreTrigger = document.getElementById('load-more-trigger');
+        if ('IntersectionObserver' in window && loadMoreTrigger) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        tryLoadNextPage();
+                    }
+                });
+            }, {
+                root: null,
+                rootMargin: '500px 0px',
+                threshold: 0
+            });
+            observer.observe(loadMoreTrigger);
+        }
+
+        // Side menu toggle behavior.
+        const menuToggle = document.getElementById('menuToggle');
+        const menuItems = document.getElementById('MenuItems');
+        const menuBackdrop = document.getElementById('menuBackdrop');
+
+        function closeMenu() {
+            menuItems.classList.remove('open');
+            menuBackdrop.classList.remove('open');
+        }
+
+        menuToggle.addEventListener('click', () => {
+            menuItems.classList.toggle('open');
+            menuBackdrop.classList.toggle('open');
+        });
+
+        menuBackdrop.addEventListener('click', closeMenu);
+        menuItems.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+
+        // Theme toggle (persisted in localStorage).
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const savedTheme = localStorage.getItem('cooklyTheme');
+
+        function applyTheme(theme) {
+            document.body.classList.toggle('theme-dark', theme === 'dark');
+            if (themeIcon) {
+                themeIcon.className = theme === 'dark' ? 'fa-regular fa-sun' : 'fa-regular fa-moon';
+            }
+        }
+
+        applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+
+        themeToggle.addEventListener('click', function() {
+            const nextTheme = document.body.classList.contains('theme-dark') ? 'light' : 'dark';
+            applyTheme(nextTheme);
+            localStorage.setItem('cooklyTheme', nextTheme);
+        });
+    </script>
+</body>
+</html>

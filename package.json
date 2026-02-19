@@ -1,0 +1,34 @@
+{
+  "name": "ibm-final-project---cookly",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seeds/recipeSeeds.js",
+    "seed:web": "node seeds/webRecipeSeeds.js",
+    "seed:indian": "node seeds/indianRecipeSeeds.js",
+    "seed:indian:must": "node seeds/indianMustHaveSeeds.js",
+    "fix:indian:images": "node scripts/fixIndianRecipeImages.js",
+    "align:indian:images": "node scripts/alignIndianMustHaveImages.js",
+    "fix:missing:images": "node scripts/fetchMissingRecipeImages.js",
+    "fix:must:ingredients": "node scripts/fixMustHaveIndianContent.js",
+    "migrate:atlas": "node scripts/migrateToAtlas.js",
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^4.0.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.1",
+    "multer": "^1.4.5-lts.2",
+    "nodemon": "^3.1.9"
+  }
+}
