@@ -100,8 +100,7 @@ const PORT = process.env.PORT || 5000;
 const startServer = async () => {
   const connected = await connectDB();
   if (!connected) {
-    console.error("MongoDB connection failed. Start local MongoDB and restart.");
-    process.exit(1);
+    console.warn("Starting server without MongoDB. Mock/fallback data paths are active.");
   }
 
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
