@@ -7,15 +7,21 @@ const connectDB = async () => {
     }
 
     try {
+        const isProduction = process.env.NODE_ENV === "production";
         const mongoUri =
             process.env.MONGO_URI ||
             process.env.MONGODB_URI ||
             process.env.MONGO_URI_ATLAS ||
-            (process.env.NODE_ENV === "production" ? null : "mongodb://localhost:27017/cookly");
+            (isProduction ? null : "mongodb://localhost:27017/cookly");
 
         if (!mongoUri) {
             console.warn("MongoDB URI is missing. Set MONGO_URI (or MONGODB_URI).");
-            console.warn("Starting without DB connection (mock fallback mode).");
+            if (isProduction) {
+                console.warn("Production mode detected. Localhost MongoDB fallback is disabled.");
+                console.warn("Add your MongoDB Atlas connection string in deployment environment variables.");
+            } else {
+                console.warn("Starting without DB connection (mock fallback mode).");
+            }
             return false;
         }
 
