@@ -1,52 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Signup page metadata + stylesheet -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create an account</title>
-    <link rel="stylesheet" href="/signup.css">
+    <title>Sign Up - Cookly</title>
+    <link rel="stylesheet" href="/css/pages/signup.css">
 </head>
 <body>
-    <!-- Main split layout: left image, right signup actions -->
     <div class="container">
         <div class="image-section">
-            <!-- Decorative food image panel -->
-            <img src="https://img.freepik.com/free-photo/top-view-delicious-cooked-vegetables-sliced-with-greens-seasonings-dark-background-soup-meal-food-sauce_140725-85847.jpg" alt="Recipe Image">
+            <img src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&w=1400&q=80" alt="Fresh plated recipe ingredients">
+            <div class="image-overlay">
+                <div class="visual-chip">Discover. Cook. Share.</div>
+                <h2>Start your own recipe collection with Cookly.</h2>
+                <p>Save favorites, publish original recipes, and keep your cooking inspiration organized in one place.</p>
+            </div>
         </div>
         <div class="form-section">
-            <!-- Brand logo area -->
-            <div class ="logo">
-                <h1 class="logo-heading"></h1>
-                    <img src="/images/Cookly-Logo.png" alt="Brand-Logo">
-                </h1>
-            </div>
-            <!-- Page heading + description -->
-            <h1>Create an account</h1>
-            <p class="subtitle">Sign up to save and review your favorite recipes.</p>
-            <!-- Third-party/social signup button list (UI only in this template) -->
+            <a class="logo" href="/" aria-label="Go to homepage">
+                <img src="/images/Cookly-Logo.svg" alt="Cookly logo">
+            </a>
+
+            <p class="eyebrow">Join Cookly</p>
+            <h1>Create your account</h1>
+            <p class="subtitle">Sign up with your details below. After signup, you will be logged in automatically.</p>
+
+            <form id="signupForm" class="auth-form">
+                <label class="field-label" for="name">Full name</label>
+                <input id="name" name="name" type="text" placeholder="Your name" required>
+
+                <label class="field-label" for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@example.com" required>
+
+                <label class="field-label" for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Create password" required>
+
+                <label class="field-label" for="confirmPassword">Confirm password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Repeat password" required>
+
+                <button type="submit" class="primary-button">Create Account</button>
+                <p id="signupMessage" class="form-message" aria-live="polite"></p>
+            </form>
+
+            <div class="divider"><span>or continue with</span></div>
+
             <ul class="social-providers">
                 <li>
-                    <button class="signup-button email-signup">
-                        <img src="https://cdn-icons-png.freepik.com/256/5968/5968534.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Email Icon">Sign up with Email
-                    </button>
+                    <a class="signup-button google-signup" href="/auth/google">
+                        <img src="https://cdn-icons-png.freepik.com/256/2504/2504739.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Google Icon">Continue with Google
+                    </a>
                 </li>
                 <li>
-                    <button class="signup-button facebook-signup">
-                        <img src="https://cdn-icons-png.freepik.com/256/15047/15047435.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Facebook Icon">Sign up with Facebook
-                    </button>
-                </li>
-                <li>
-                    <button class="signup-button google-signup">
-                        <img src="https://cdn-icons-png.freepik.com/256/2504/2504739.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Google Icon">Sign up with Google
-                    </button>
+                    <a class="signup-button facebook-signup" href="/auth/facebook">
+                        <img src="https://cdn-icons-png.freepik.com/256/15047/15047435.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Facebook Icon">Continue with Facebook
+                    </a>
                 </li>
             </ul>
-            <!-- Navigation to login flow -->
-            <p class="login-link">Are you existing user? <a href="/login">Log in</a></p>
-            <!-- Legal copy -->
-            <p class="terms-privacy">By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. If you live in the INDIA you will also opt in to Allrecipes email communication.</p>
+
+            <p class="login-link">Already have an account? <a href="/login">Log in</a></p>
         </div>
     </div>
+
+    <script>
+        const signupForm = document.getElementById('signupForm');
+        const signupMessage = document.getElementById('signupMessage');
+
+        signupForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            signupMessage.textContent = 'Creating account...';
+            signupMessage.className = 'form-message';
+
+            const name = signupForm.name.value.trim();
+            const email = signupForm.email.value.trim();
+            const password = signupForm.password.value;
+            const confirmPassword = signupForm.confirmPassword.value;
+
+            if (password !== confirmPassword) {
+                signupMessage.textContent = 'Passwords do not match.';
+                signupMessage.className = 'form-message error';
+                return;
+            }
+
+            try {
+                const registerResponse = await fetch('/api/users/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const registerData = await registerResponse.json();
+                if (!registerResponse.ok) {
+                    throw new Error(registerData.error || 'Signup failed');
+                }
+
+                const loginResponse = await fetch('/api/users/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const loginData = await loginResponse.json();
+                if (!loginResponse.ok) {
+                    throw new Error(loginData.error || 'Account created, but login failed');
+                }
+
+                if (loginData.token) {
+                    localStorage.setItem('cooklyToken', loginData.token);
+                }
+
+                signupMessage.textContent = 'Account created successfully. Redirecting...';
+                signupMessage.className = 'form-message success';
+                window.setTimeout(() => {
+                    window.location.href = '/';
+                }, 700);
+            } catch (error) {
+                signupMessage.textContent = error.message;
+                signupMessage.className = 'form-message error';
+            }
+        });
+    </script>
 </body>
 </html>

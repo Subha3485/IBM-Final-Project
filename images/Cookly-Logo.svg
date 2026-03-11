@@ -1,0 +1,33 @@
+<svg width="480" height="144" viewBox="0 0 480 144" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="iconBg" x1="16" y1="16" x2="128" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD65A"/>
+      <stop offset="1" stop-color="#F0A11E"/>
+    </linearGradient>
+    <linearGradient id="plateBg" x1="47" y1="38" x2="95" y2="101" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFDF7"/>
+      <stop offset="1" stop-color="#F4ECDD"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="12" y="12" width="120" height="120" rx="34" fill="#181511"/>
+  <rect x="20" y="20" width="104" height="104" rx="28" fill="url(#iconBg)"/>
+  <circle cx="72" cy="72" r="31" fill="url(#plateBg)"/>
+  <circle cx="72" cy="72" r="27" stroke="#E7D7B4" stroke-width="3" stroke-dasharray="1 5"/>
+  <path d="M56 54L53 91" stroke="#23150E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M50 56L53 78L56 54L59 78L62 56" stroke="#23150E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M53 91L56 97L59 91" stroke="#23150E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M72 52C65 52 60 61 60 72C60 81 65 88 72 93C79 88 84 81 84 72C84 61 79 52 72 52Z" stroke="#23150E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M72 52V97" stroke="#23150E" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M68 92L72 97L76 92" stroke="#23150E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M88 57V70" stroke="#23150E" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M92 57V70" stroke="#23150E" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M96 57V70" stroke="#23150E" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M88 70L87 91" stroke="#23150E" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M92 70V91" stroke="#23150E" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M96 70L97 91" stroke="#23150E" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M87 91L92 97L97 91" stroke="#23150E" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="162" y="70" fill="#17130F" font-family="Trebuchet MS, Arial, sans-serif" font-size="54" font-weight="800" letter-spacing="-1.4">Cookly</text>
+  <text x="164" y="103" fill="#785B36" font-family="Arial, sans-serif" font-size="18" font-weight="600" letter-spacing="1.8">RECIPE SHARING PLATFORM</text>
+</svg>

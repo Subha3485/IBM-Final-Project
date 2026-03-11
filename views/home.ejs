@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cookly.com</title>
-    <link rel="stylesheet" href="/home.css">
-    <link rel="stylesheet" href="/index.css">
+    <link rel="stylesheet" href="/css/pages/home.css">
+    <link rel="stylesheet" href="/css/shared/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <style>
         /* Hover effect for dynamically generated recipe cards */
@@ -26,10 +26,10 @@
       <button id="menuToggle" class="menu-toggle" aria-label="Open menu" type="button">
           <i class="fa-solid fa-bars"></i>
       </button>
-      <div class="logo">
-          <img src="/images/Cookly-Logo.png" alt="Cookly logo">
+      <a class="logo header-logo" href="/" aria-label="Go to homepage">
+          <img src="/images/Cookly-Icon.svg" alt="Cookly logo">
           <span class="brand-text">Cookly</span>
-      </div>
+      </a>
       <div class="top-search-wrap">
           <input id="topSearchInput" class="top-search-input" type="text" placeholder="Search recipes...">
           <button id="topSearchBtn" class="top-search-btn" type="button" aria-label="Search">
@@ -44,6 +44,9 @@
           <a href="/create" class="top-pill create-pill">
               <i class="fa-solid fa-plus"></i> Create
           </a>
+          <a href="/login" class="top-pill account-pill">
+              <i class="fa-regular fa-user"></i> Account
+          </a>
           <button id="themeToggle" class="icon-btn theme-btn" type="button" aria-label="Toggle theme">
               <i id="themeIcon" class="fa-regular fa-moon"></i>
           </button>
@@ -51,13 +54,15 @@
               <i class="fa-regular fa-bell"></i>
               <span class="badge">2</span>
           </button>
-          <img class="user-avatar" src="/images/Cookly-Logo.png" alt="User profile">
+          <a href="/login" aria-label="Open login page">
+              <img class="user-avatar" src="/images/Cookly-Icon.svg" alt="User profile">
+          </a>
       </div>
       <ul id="MenuItems">
           <li><a href="/">Home</a></li>
           <li><a href="/">Recipes</a></li>
           <li><a href="/about">About</a></li>
-          <li><a href="/contact">Account Center</a></li>
+          <li><a href="/login">Account Center</a></li>
           <li><a href="/login">Login</a></li>
           <li><a href="/signup">Sign Up</a></li>
           <li><a href="">Cart</a></li>
@@ -102,7 +107,7 @@
         let isFetching = false;
         let hasMore = true;
         let isSearchActive = false;
-        let currentCuisine = 'Indian';
+        let currentCuisine = 'All';
         let availableCuisines = [];
 
         function shuffleRecipes(list) {
@@ -294,7 +299,7 @@
         async function initHome() {
             await fetchCuisineTypes();
             renderCuisineButtons();
-            setCuisineFilter('Indian');
+            setCuisineFilter('All');
         }
         initHome();
 

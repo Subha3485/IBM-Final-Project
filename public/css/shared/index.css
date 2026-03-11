@@ -84,17 +84,35 @@ nav .logo img {
     object-fit: cover;
 }
 
+.nav .logo.header-logo {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    height: 44px;
+}
+
+.nav .logo.header-logo img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+}
+
 .logo {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    color: inherit;
 }
 
 .brand-text {
-    font-size: 1.35rem;
+    font-size: 1.55rem;
     font-weight: 800;
     color: #1f1f1f;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.1px;
 }
 
 .top-search-wrap {
@@ -252,7 +270,17 @@ nav .logo img {
 
 @media (max-width: 900px) {
     .brand-text {
-        font-size: 1.1rem;
+        font-size: 1.32rem;
+    }
+
+    .nav .logo.header-logo {
+        gap: 10px;
+        height: 38px;
+    }
+
+    .nav .logo.header-logo img {
+        width: 32px;
+        height: 32px;
     }
 
     .top-search-wrap {
@@ -270,6 +298,20 @@ nav .logo img {
 }
 
 @media (max-width: 700px) {
+    .nav .logo.header-logo {
+        gap: 8px;
+        height: 34px;
+    }
+
+    .nav .logo.header-logo img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .brand-text {
+        font-size: 1.12rem;
+    }
+
     .top-search-wrap {
         max-width: 230px;
     }

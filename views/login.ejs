@@ -1,52 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Login page metadata + stylesheet -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Login</title>
-    <link rel="stylesheet" href="/login.css">
+    <title>Login - Cookly</title>
+    <link rel="stylesheet" href="/css/pages/login.css">
 </head>
 <body>
-    <!-- Main split layout: left image, right auth actions -->
     <div class="container">
         <div class="image-section">
-            <!-- Decorative food image panel -->
-            <img src="https://img.freepik.com/free-photo/top-view-delicious-cooked-vegetables-sliced-with-greens-seasonings-dark-background-soup-meal-food-sauce_140725-85847.jpg" alt="Recipe Image">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1400&q=80" alt="Chef plating a gourmet dish">
+            <div class="image-overlay">
+                <div class="visual-chip">Cook. Save. Share.</div>
+                <h2>Recipes that look premium before the first bite.</h2>
+                <p>Join Cookly to collect favorites, publish your own dishes, and keep your kitchen ideas in one place.</p>
+            </div>
         </div>
         <div class="form-section">
-            <!-- Brand logo area -->
-            <div class ="logo">
-                <h1 class="logo-heading"></h1>
-                    <img src="/images/Cookly-Logo.png" alt="Brand-Logo">
-                </h1>
-            </div>
-            <!-- Page heading + description -->
-            <h1> User Login</h1>
-            <p class="subtitle">Log in to enter and view all recipes.</p>
-            <!-- Third-party/social login button list (UI only in this template) -->
+            <a class="logo" href="/" aria-label="Go to homepage">
+                <img src="/images/Cookly-Logo.svg" alt="Cookly logo">
+            </a>
+
+            <p class="eyebrow">Welcome back</p>
+            <h1>Login to your account</h1>
+            <p class="subtitle">Use your email and password to access Cookly and continue building your recipe collection.</p>
+
+            <form id="loginForm" class="auth-form">
+                <label class="field-label" for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="you@example.com" required>
+
+                <label class="field-label" for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Enter password" required>
+
+                <button type="submit" class="primary-button">Login with Email</button>
+                <p id="loginMessage" class="form-message" aria-live="polite"></p>
+            </form>
+
+            <div class="divider"><span>or continue with</span></div>
+
             <ul class="social-providers">
                 <li>
-                    <button class="login-button email-login">
-                        <img src="https://cdn-icons-png.freepik.com/256/5968/5968534.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Email Icon">Log in with Email
-                    </button>
+                    <a class="login-button google-login" href="/auth/google">
+                        <img src="https://cdn-icons-png.freepik.com/256/2504/2504739.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Google Icon">Continue with Google
+                    </a>
                 </li>
                 <li>
-                    <button class="login-button facebook-login">
-                        <img src="https://cdn-icons-png.freepik.com/256/15047/15047435.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Facebook Icon">Log in with Facebook
-                    </button>
-                </li>
-                <li>
-                    <button class="login-button google-login">
-                        <img src="https://cdn-icons-png.freepik.com/256/2504/2504739.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Google Icon">Log in with Google
-                    </button>
+                    <a class="login-button facebook-login" href="/auth/facebook">
+                        <img src="https://cdn-icons-png.freepik.com/256/15047/15047435.png?ga=GA1.1.1730312580.1740674040&semt=ais_hybrid" alt="Facebook Icon">Continue with Facebook
+                    </a>
                 </li>
             </ul>
-            <!-- Navigation to signup flow -->
+
             <p class="signup-link">Don't have an account? <a href="/signup">Sign Up</a></p>
-            <!-- Legal copy -->
-            <p class="terms-privacy">By signing up, you agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. If you live in the INDIA you will also opt in to Allrecipes email communication.</p>
         </div>
     </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const loginMessage = document.getElementById('loginMessage');
+        const params = new URLSearchParams(window.location.search);
+
+        const tokenFromOAuth = params.get('token');
+        const oauthProvider = params.get('provider');
+        const oauthError = params.get('oauthError');
+
+        if (tokenFromOAuth) {
+            localStorage.setItem('cooklyToken', tokenFromOAuth);
+            loginMessage.textContent = `${oauthProvider || 'OAuth'} login successful. Redirecting...`;
+            loginMessage.className = 'form-message success';
+            window.setTimeout(() => {
+                window.location.href = '/';
+            }, 700);
+        } else if (oauthError) {
+            loginMessage.textContent = `OAuth login is not ready: ${oauthError.replace(':', ' - ')}.`;
+            loginMessage.className = 'form-message error';
+        }
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            loginMessage.textContent = 'Logging in...';
+            loginMessage.className = 'form-message';
+
+            const payload = {
+                email: loginForm.email.value.trim(),
+                password: loginForm.password.value
+            };
+
+            try {
+                const response = await fetch('/api/users/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+
+                if (data.token) {
+                    localStorage.setItem('cooklyToken', data.token);
+                }
+
+                loginMessage.textContent = 'Login successful. Redirecting...';
+                loginMessage.className = 'form-message success';
+                window.setTimeout(() => {
+                    window.location.href = '/';
+                }, 700);
+            } catch (error) {
+                loginMessage.textContent = error.message;
+                loginMessage.className = 'form-message error';
+            }
+        });
+    </script>
 </body>
 </html>

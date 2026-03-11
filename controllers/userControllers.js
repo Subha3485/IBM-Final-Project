@@ -8,14 +8,25 @@ const mockUsers = {};
 const registerUser = async (req, res) => {
     try {
         const { name, email, password } = req.body;
+        if (!name || !email || !password) {
+            return res.status(400).json({ error: "Name, email, and password are required" });
+        }
+
+        const existingUser = await User.findOne({ email }).catch(() => null);
+        if (existingUser) {
+            return res.status(400).json({ error: "User already exists with this email" });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = new User({ name, email, password: hashedPassword });
         await user.save();
         res.json({ message: "User registered successfully" });
     } catch (error) {
-        // Mock registration
-        mockUsers[req.body.email] = { name: req.body.name, password: req.body.password };
-        res.json({ message: "User registered (mock mode)" });
+        if (process.env.USE_MOCK_DATA === "true") {
+            mockUsers[req.body.email] = { name: req.body.name, password: req.body.password };
+            return res.json({ message: "User registered (mock mode)" });
+        }
+        return res.status(500).json({ error: "Failed to register user" });
     }
 };
 

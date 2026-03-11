@@ -5,11 +5,14 @@ const dotenv = require("dotenv");
 const path = require("path");
 const http = require("http");
 const mongoose = require("mongoose");
+const session = require("express-session");
 const connectDB = require("./config/db");
 const Recipe = require("./models/Recipe");
+const { passport, configurePassport } = require("./config/passport");
 
 // Load environment variables from .env and initialize DB connection.
 dotenv.config();
+configurePassport();
 
 const app = express();
 
@@ -20,11 +23,20 @@ app.set("views", path.join(__dirname, "views"));
 // Parse JSON request bodies and serve static assets from project root.
 app.use(cors());
 app.use(express.json());
+app.use("/css", express.static(path.join(__dirname, "public", "css")));
 app.use(express.static(path.join(__dirname)));
+app.use(session({
+  secret: process.env.SESSION_SECRET || process.env.JWT_SECRET || "cookly-session-secret",
+  resave: false,
+  saveUninitialized: false,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Mount REST API route modules.
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/recipes", require("./routes/recipeRoutes"));
+app.use("/auth", require("./routes/authRoutes"));
 
 // Render the home page.
 app.get("/", (req, res) => {
