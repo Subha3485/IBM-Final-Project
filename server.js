@@ -6,6 +6,7 @@ const path = require("path");
 const http = require("http");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const MongoStore = require("connect-mongo").default;
 const connectDB = require("./config/db");
 const Recipe = require("./models/Recipe");
 const { passport, configurePassport } = require("./config/passport");
@@ -15,6 +16,16 @@ dotenv.config();
 configurePassport();
 
 const app = express();
+const isProduction = process.env.NODE_ENV === "production";
+const mongoUri =
+  process.env.MONGO_URI ||
+  process.env.MONGODB_URI ||
+  process.env.MONGO_URI_ATLAS ||
+  null;
+
+if (isProduction) {
+  app.set("trust proxy", 1);
+}
 
 // Configure server-side rendering with EJS templates.
 app.set("view engine", "ejs");
@@ -25,11 +36,31 @@ app.use(cors());
 app.use(express.json());
 app.use("/css", express.static(path.join(__dirname, "public", "css")));
 app.use(express.static(path.join(__dirname)));
-app.use(session({
+
+const sessionConfig = {
   secret: process.env.SESSION_SECRET || process.env.JWT_SECRET || "cookly-session-secret",
   resave: false,
   saveUninitialized: false,
-}));
+  cookie: {
+    httpOnly: true,
+    sameSite: isProduction ? "lax" : "lax",
+    secure: isProduction,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
+if (mongoUri && process.env.USE_MOCK_DATA !== "true") {
+  sessionConfig.store = MongoStore.create({
+    mongoUrl: mongoUri,
+    collectionName: "sessions",
+    ttl: 60 * 60 * 24 * 7,
+    autoRemove: "native",
+  });
+} else if (isProduction) {
+  console.warn("Mongo-backed session store is not configured. Sessions may not persist in production.");
+}
+
+app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 
